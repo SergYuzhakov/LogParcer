@@ -462,7 +462,6 @@ public class LogParser implements IPQuery, UserQuery, DateQuery, EventQuery, QLQ
 
     @Override
     public Set<Object> execute(String query) {
-        //Set<Object> result = new HashSet<>();
         Map<Integer, String> commandMap = getCommandFromQuery(query);
         if (commandMap.size() == 1) {
             String field = commandMap.get(0);
@@ -472,8 +471,9 @@ public class LogParser implements IPQuery, UserQuery, DateQuery, EventQuery, QLQ
             String outField = commandMap.get(0);
             String filterField = commandMap.get(1);
             String expectedField = commandMap.get(2).replaceAll("\"", "");
+            Object expected = getTypeField(expectedField);
             return logEntities.stream()
-                    .filter(logEntity -> getValueFromLogEntity(logEntity, filterField).equals(getTypeField(expectedField)))
+                    .filter(logEntity -> getValueFromLogEntity(logEntity, filterField).equals(expected))
                     .map(logEntity -> getValueFromLogEntity(logEntity, outField))
                     .collect(Collectors.toSet());
         }

@@ -11,6 +11,8 @@ public class Solution {
         SimpleDateFormat format = new SimpleDateFormat("dd.MM.yy HH:mm:ss");
         Date after = format.parse("19.03.2016 00:00:00");
         Date before = format.parse("21.10.2021 19:45:25");
+        String user = "Vasya Pupkin";
+        String user2 = "Amigo";
         /*
         String user = "Amigo";
         main.java.Event event = main.java.Event.DONE_TASK;
@@ -72,7 +74,10 @@ public class Solution {
         logParser.getAllSolvedTasksAndTheirNumber(null,null).entrySet().stream().forEach(System.out::println);
 
          */
-        logParser.execute("get ip for user = \"Eduard Petrovich Morozko\"").stream().forEach(System.out::println);
+        logParser.execute("get user").stream().forEach(System.out::println);
+        System.out.printf("IP for user - %s:",user);
+        System.out.println();
+        logParser.execute("get ip for user = \"Vasya Pupkin\"").stream().forEach(System.out::println);
     }
 
 }

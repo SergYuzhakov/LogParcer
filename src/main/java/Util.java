@@ -110,14 +110,17 @@ public class Util {
     }
 
     public static Map<Integer, String> getCommandFromQuery(String query) {
-        // String regular1 = "get (ip|user|date|event|status)";
-        String regular = "get (ip|user|date|event|status) for (ip|user|date|event|status) = (\".*?\")";
+        String[] regular = {"get (ip|user|date|event|status)"
+                , "get (ip|user|date|event|status) for (ip|user|date|event|status) = (\".*?\")"};
         Map<Integer, String> fieldMap = new HashMap<>();
-        Pattern pattern = Pattern.compile(regular);
-        Matcher matcher = pattern.matcher(query);
-        matcher.find();
-        for (int i = 0; i < matcher.groupCount(); i++) {
-            fieldMap.put(i, matcher.group(i + 1));
+        for (int i = 0; i < regular.length; i++) {
+            Pattern pattern = Pattern.compile(regular[i]);
+            Matcher matcher = pattern.matcher(query);
+            if (matcher.find()) {
+                for (int j = 0; j < matcher.groupCount(); j++) {
+                    fieldMap.put(j, matcher.group(j + 1));
+                }
+            }
         }
         return fieldMap;
     }
