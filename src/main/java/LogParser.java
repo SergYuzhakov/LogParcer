@@ -446,7 +446,6 @@ public class LogParser implements IPQuery, UserQuery, DateQuery, EventQuery, QLQ
 
     @Override
     public Map<Integer, Integer> getAllDoneTasksAndTheirNumber(Date after, Date before) {
-
         try {
             return getFilteredLogEntities(logEntities, after, before).stream()
                     .filter(logEntity -> logEntity.getEvent().equals(Event.DONE_TASK))

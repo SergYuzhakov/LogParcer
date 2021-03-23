@@ -110,8 +110,10 @@ public class Util {
     }
 
     public static Map<Integer, String> getCommandFromQuery(String query) {
-        String[] regular = {"get (ip|user|date|event|status)"
-                , "get (ip|user|date|event|status) for (ip|user|date|event|status) = (\".*?\")"};
+        String[] regular = {
+                "get (ip|user|date|event|status)"
+                , "get (ip|user|date|event|status) for (ip|user|date|event|status) = (\".*?\")"
+                , "get (ip|user|date|event|status) for (ip|user|date|event|status) = (\".*?\") and date between (\".*?\") and (\".*?\")"};
         Map<Integer, String> fieldMap = new HashMap<>();
         for (int i = 0; i < regular.length; i++) {
             Pattern pattern = Pattern.compile(regular[i]);
@@ -119,22 +121,23 @@ public class Util {
             if (matcher.find()) {
                 for (int j = 0; j < matcher.groupCount(); j++) {
                     fieldMap.put(j, matcher.group(j + 1));
+                    System.out.println(fieldMap);
                 }
             }
         }
         return fieldMap;
     }
 
-    public static <T> T getTypeField(String str) {
+    public static Object getTypeField(String str) {
         Enum[] events = Event.values();
         Status[] statuses = Status.values();
-        if (getLocalDateTime(str) != null) return (T) convertDateTime(getLocalDateTime(str));
+        if (getLocalDateTime(str) != null) return convertDateTime(getLocalDateTime(str));
         for (Enum e : events) {
-            if (str.equals(e.name())) return (T) Event.valueOf(str);
+            if (str.equals(e.name())) return Event.valueOf(str);
         }
         for (Status s : statuses) {
-            if (str.equals(s.name())) return (T) Status.valueOf(str);
+            if (str.equals(s.name())) return Status.valueOf(str);
         }
-        return (T) str;
+        return str;
     }
 }
