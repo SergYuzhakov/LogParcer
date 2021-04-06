@@ -461,21 +461,29 @@ public class LogParser implements IPQuery, UserQuery, DateQuery, EventQuery, QLQ
 
     @Override
     public Set<Object> execute(String query) {
+        Set<Object> result = new HashSet<>();
         Map<Integer, String> commandMap = getCommandFromQuery(query);
+        String field1, field2, value1, value2, value3;
         if (commandMap.size() == 1) {
-            String field = commandMap.get(0);
-            return logEntities.stream()
-                    .map(logEntity -> (getValueFromLogEntity(logEntity, field))).collect(Collectors.toSet());
-        } else {
-            String outField = commandMap.get(0);
-            String filterField = commandMap.get(1);
-            String expectedField = commandMap.get(2).replaceAll("\"", "");
-            Object expected = getTypeField(expectedField);
-            return logEntities.stream()
-                    .filter(logEntity -> getValueFromLogEntity(logEntity, filterField).equals(expected))
-                    .map(logEntity -> getValueFromLogEntity(logEntity, outField))
-                    .collect(Collectors.toSet());
+            logEntities.stream()
+                    .forEach(logEntity -> result.add(getValueFromLogEntity(logEntity, commandMap.get(0))));
         }
+        if (commandMap.size() == 3) {
+            Object filterValue = getTypeField(commandMap.get(2).replaceAll("\"", ""));
+            logEntities.stream()
+                    .filter(logEntity -> getValueFromLogEntity(logEntity, commandMap.get(1)).equals(filterValue))
+                    .forEach(logEntity -> result.add(getValueFromLogEntity(logEntity, commandMap.get(0))));
+        } else {
+            if (commandMap.size() == 5) {
+                Object filterValue1 = getTypeField(commandMap.get(2).replaceAll("\"", ""));
+                Date filterValue2 = (Date) getTypeField(commandMap.get(3).replaceAll("\"", ""));
+                Date filterValue3 = (Date) getTypeField(commandMap.get(4).replaceAll("\"", ""));
+                logEntities.stream()
+                        .filter(logEntity -> isBetweenDate(convertDateTime(logEntity.getDate()), filterValue2, filterValue3))
+                        .filter(logEntity -> getValueFromLogEntity(logEntity, commandMap.get(1)).equals(filterValue1))
+                        .forEach(logEntity -> result.add(getValueFromLogEntity(logEntity, commandMap.get(0))));
+            }
+        }
+        return result;
     }
-
 }

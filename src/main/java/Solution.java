@@ -82,8 +82,8 @@ public class Solution {
          */
         logParser.execute("get user").stream().forEach(System.out::println);
         logParser.execute("get ip for user = \"Vasya Pupkin\"").stream().forEach(System.out::println);
-      //  logParser.execute("get ip for user = \"Eduard Petrovich Morozko\" and date between \"11.12.2013 0:00:00\" and \"03.01.2014 23:59:59\"")
-      //          .stream().forEach(System.out::println);
+        logParser.execute("get ip for user = \"Eduard Petrovich Morozko\" and date between \"11.12.2013 0:00:00\" and \"03.01.2014 23:59:59\"")
+                .stream().forEach(System.out::println);
     }
 
 }

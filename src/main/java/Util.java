@@ -121,7 +121,6 @@ public class Util {
             if (matcher.find()) {
                 for (int j = 0; j < matcher.groupCount(); j++) {
                     fieldMap.put(j, matcher.group(j + 1));
-                    System.out.println(fieldMap);
                 }
             }
         }
